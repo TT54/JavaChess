@@ -16,11 +16,11 @@ public class ChessMain {
     public static void main(String[] args) {
         manager = new FrameManager();
         //QuickChessBoard active = new QuickChessBoard("r4rk1/1pp1qppp/p1np1n2/2b1p1B1/2B1P1b1/P1NP1N2/1PP1QPPP/R4RK1 w - - 0 10");
-        QuickChessBoard active = new QuickChessBoard(AbstractChessBoard.perftFens[4]);
+        QuickChessBoard active = new QuickChessBoard(AbstractChessBoard.perftFens[2]);
         manager.showFrame(active);
 
-        QuickChessBoard board = new QuickChessBoard(AbstractChessBoard.perftFens[4]);
-        System.out.println(board.perft(2, 2));
+        QuickChessBoard board = new QuickChessBoard("8/2p5/3p4/KP5r/5R2/6k1/4P1P1/8 w - - 1 2");
+        //System.out.println(board.perft(2, 2));
         //board.launchPerftChecks();
     }
 }

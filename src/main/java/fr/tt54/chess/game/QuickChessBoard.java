@@ -1,5 +1,6 @@
 package fr.tt54.chess.game;
 
+import fr.tt54.chess.utils.ArrayUtils;
 import fr.tt54.chess.utils.Tuple;
 
 import java.util.*;
@@ -59,8 +60,10 @@ public class QuickChessBoard extends AbstractChessBoard{
             }
 
             for(ChessMove move : allowedMoves){
-                if(move.isEnPassant() && isLegalMove(move)){
-                    validMoves.add(move);
+                if(move.isEnPassant()){
+                    if(isLegalMove(move)){
+                        validMoves.add(move);
+                    }
                 } else if(isMoveValidWithPins(move)){
                     validMoves.add(move);
                 }
@@ -170,13 +173,21 @@ public class QuickChessBoard extends AbstractChessBoard{
 
                         if(targetPiece == ChessPiece.getKing(!piece.isWhite()) && shouldFillAttackedSquares){
                             // This piece attacks the king : this is a check
-                            int checkRow = targetRow;
-                            int checkColumn = targetColumn;
-                            do{
+                            int checkRow = targetRow + standardMoves[i][0];
+                            int checkColumn = targetColumn + standardMoves[i][1];
+
+                            if(isInBoard(checkRow, checkColumn)){
+                                // We mark the square behind the king as an attacked square
+                                addAttackedSquare(checkRow, checkColumn, row, column);
+                            }
+                            checkRow = targetRow;
+                            checkColumn = targetColumn;
+
+                            while(checkRow != row || checkColumn != column){
+                                checks[checkRow][checkColumn] = pos + 1; // We add +1 to keep 0 as a non-checked square
                                 checkRow -= standardMoves[i][0];
                                 checkColumn -= standardMoves[i][1];
-                                checks[checkRow][checkColumn] = pos + 1; // We add +1 to keep 0 as a non-checked square
-                            } while(checkRow != row && checkColumn != column);
+                            }
                         }
                     }
                     break;
@@ -200,11 +211,11 @@ public class QuickChessBoard extends AbstractChessBoard{
                             // There's a pin
 
                             // We should add the list of squares pinned by this piece
-                            do{
+                            while(targetRow != row || targetColumn != column){
                                 targetRow -= standardMoves[i][0];
                                 targetColumn -= standardMoves[i][1];
                                 pins[targetRow][targetColumn] = pos + 1; // We add +1 to keep 0 as a non-pinned square
-                            } while(targetRow != row && targetColumn != column);
+                            }
                         }
                         break;
                     }
@@ -344,7 +355,7 @@ public class QuickChessBoard extends AbstractChessBoard{
 
             if (isInBoard(targetRow, targetColumn)) {
                 ChessPiece targetPiece = getPiece(targetRow, targetColumn);
-                if ((targetPiece == null || targetPiece.isWhite() != piece.isWhite()) && squaresAttackers[targetRow][targetColumn] == null) {
+                if ((targetPiece == null || targetPiece.isWhite() != piece.isWhite()) && squaresAttackers[targetRow][targetColumn] == null && checks[targetRow][targetColumn] == 0) {
                     ChessMove move = ChessMove.standardMove(piece, row, column, targetRow, targetColumn, targetPiece, this);
                     allowedMoves.add(move);
                 }

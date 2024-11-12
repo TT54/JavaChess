@@ -83,8 +83,10 @@ public class ChessPanel extends GraphicPanel {
                                     squareSize, squareSize, new Color(200, 200, 0, 50)));
                             for (ChessMove move : moves) {
                                 if (move.initialRow() == node.getRow() && move.initialColumn() == node.getColumn()) {
-                                    RectangleNode indicatorNode = getIndicatorNode(move, squareSize, pieceSize);
-                                    moveIndicators.add(indicatorNode);
+                                    if(!move.isPromotion() || Math.abs(move.promotePiece().getId()) == 5){
+                                        RectangleNode indicatorNode = getIndicatorNode(move, squareSize, pieceSize);
+                                        moveIndicators.add(indicatorNode);
+                                    }
                                 }
                             }
                             selected[0] = node;
