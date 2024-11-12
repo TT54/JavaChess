@@ -5,30 +5,32 @@ import java.util.Map;
 
 public enum ChessPiece{
 
-    WHITE_PAWN(1, 'P', -1, -1),
-    WHITE_KNIGHT(2, 'N', -1, -1),
-    WHITE_BISHOP(3, 'B', 4, 7),
-    WHITE_ROOK(4, 'R', 0, 3),
-    WHITE_QUEEN(5, 'Q', 0, 7),
-    WHITE_KING(6, 'K', -1, -1),
-    BLACK_PAWN(-1, 'p', -1, -1),
-    BLACK_KNIGHT(-2, 'n', -1, -1),
-    BLACK_BISHOP(-3, 'b', 4, 7),
-    BLACK_ROOK(-4, 'r', 0, 3),
-    BLACK_QUEEN(-5, 'q', 0, 7),
-    BLACK_KING(-6, 'k', -1, -1);
+    WHITE_PAWN(1, 'P', -1, -1, false),
+    WHITE_KNIGHT(2, 'N', -1, -1, false),
+    WHITE_BISHOP(3, 'B', 4, 7, true),
+    WHITE_ROOK(4, 'R', 0, 3, true),
+    WHITE_QUEEN(5, 'Q', 0, 7, true),
+    WHITE_KING(6, 'K', -1, -1, false),
+    BLACK_PAWN(-1, 'p', -1, -1, false),
+    BLACK_KNIGHT(-2, 'n', -1, -1, false),
+    BLACK_BISHOP(-3, 'b', 4, 7, true),
+    BLACK_ROOK(-4, 'r', 0, 3, true),
+    BLACK_QUEEN(-5, 'q', 0, 7, true),
+    BLACK_KING(-6, 'k', -1, -1, false);
 
 
     private final int id;
     private final char fenChar;
     private final int beginStandardOffset;
     private final int endStandardOffset;
+    private final boolean canCheckBeBlocked;
 
-    ChessPiece(int id, char fenChar, int beginStandardOffset, int endStandardOffset) {
+    ChessPiece(int id, char fenChar, int beginStandardOffset, int endStandardOffset, boolean canCheckBeBlocked) {
         this.id = id;
         this.fenChar = fenChar;
         this.beginStandardOffset = beginStandardOffset;
         this.endStandardOffset = endStandardOffset;
+        this.canCheckBeBlocked = canCheckBeBlocked;
     }
 
     public int getId() {
@@ -49,6 +51,10 @@ public enum ChessPiece{
 
     public int getEndStandardOffset() {
         return endStandardOffset;
+    }
+
+    public boolean canCheckBeBlocked() {
+        return canCheckBeBlocked;
     }
 
     private static final Map<Character, ChessPiece> pieceMap = new HashMap<>();
@@ -83,5 +89,9 @@ public enum ChessPiece{
     }
     public static ChessPiece[] getColoredPromotionPieces(boolean white){
         return white ? getWhitePromotionPieces() : getBlackPromotionPieces();
+    }
+
+    public static ChessPiece getKing(boolean white){
+        return white ? WHITE_KING : BLACK_KING;
     }
 }

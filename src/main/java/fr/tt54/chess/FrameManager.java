@@ -1,5 +1,6 @@
 package fr.tt54.chess;
 
+import fr.tt54.chess.game.AbstractChessBoard;
 import fr.tt54.chess.game.ChessBoard;
 import fr.tt54.chess.graphics.ChessPanel;
 import fr.ttgraphiclib.GraphicManager;
@@ -10,9 +11,9 @@ public class FrameManager {
     public ChessPanel panel;
     public Frame frame;
 
-    private ChessBoard displayedBoard;
+    private AbstractChessBoard displayedBoard;
 
-    public void showFrame(ChessBoard displayedBoard){
+    public void showFrame(AbstractChessBoard displayedBoard){
         this.displayedBoard = displayedBoard;
 
         frame = new Frame("Chess", 800, 800);
@@ -20,7 +21,7 @@ public class FrameManager {
         GraphicManager.enable(frame, panel);
     }
 
-    public void showGame(ChessBoard displayedBoard){
+    public void showGame(AbstractChessBoard displayedBoard){
         this.displayedBoard = displayedBoard;
         this.panel.setBoard(this.displayedBoard);
     }

@@ -78,7 +78,7 @@ public class ChessPanel extends GraphicPanel {
                             moveIndicators.remove(n);
                         }
 
-                        if(selected[0] != node) {
+                        if(selected[0] != node && node.getPiece().isWhite() == board.isWhiteToPlay()) {
                             moveIndicators.add(new RectangleNode(ChessPanel.this,(column - 4) * squareSize + (squareSize - pieceSize), (7 - row - 4) * squareSize + (squareSize - pieceSize),
                                     squareSize, squareSize, new Color(200, 200, 0, 50)));
                             for (ChessMove move : moves) {

@@ -9,11 +9,13 @@ import java.net.URL;
 
 public class ChessPieceNode extends ImageNode {
 
+    private final ChessPiece piece;
     private final int row;
     private final int column;
 
     public ChessPieceNode(GraphicPanel panel, ChessPiece piece, double x, double y, double width, double height, int row, int column) {
         super(panel, x, y, width, height, getPieceImage(piece));
+        this.piece = piece;
         this.row = row;
         this.column = column;
     }
@@ -24,6 +26,10 @@ public class ChessPieceNode extends ImageNode {
 
     public int getColumn() {
         return column;
+    }
+
+    public ChessPiece getPiece() {
+        return piece;
     }
 
     public static URL getPieceImage(ChessPiece piece) {
