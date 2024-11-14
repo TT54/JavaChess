@@ -83,7 +83,6 @@ public abstract class AbstractChessBoard {
         int[] results = new int[perftFens.length];
         for(int i = 0; i < perftFens.length; i++){
             loadFen(perftFens[i]);
-            ChessMain.manager.panel.setBoard(this);
             results[i] = -1;
             for(int j = 0; j < perftExpectedResults[i].length; j++){
                 long elapsedTime = System.nanoTime();

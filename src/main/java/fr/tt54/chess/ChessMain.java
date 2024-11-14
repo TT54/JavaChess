@@ -2,6 +2,7 @@ package fr.tt54.chess;
 
 import fr.tt54.chess.game.AbstractChessBoard;
 import fr.tt54.chess.game.ChessBoard;
+import fr.tt54.chess.game.IntegerChessBoard;
 import fr.tt54.chess.game.QuickChessBoard;
 
 import java.text.DecimalFormat;
@@ -15,12 +16,23 @@ public class ChessMain {
 
     public static void main(String[] args) {
         manager = new FrameManager();
-        //QuickChessBoard active = new QuickChessBoard("r4rk1/1pp1qppp/p1np1n2/2b1p1B1/2B1P1b1/P1NP1N2/1PP1QPPP/R4RK1 w - - 0 10");
-        QuickChessBoard active = new QuickChessBoard(AbstractChessBoard.perftFens[2]);
+        IntegerChessBoard active = new IntegerChessBoard();
         manager.showFrame(active);
 
-        QuickChessBoard board = new QuickChessBoard("8/2p5/3p4/KP5r/5R2/6k1/4P1P1/8 w - - 1 2");
-        //System.out.println(board.perft(2, 2));
-        //board.launchPerftChecks();
+
+        /*System.out.println("Standard implementation perft");
+        ChessBoard board1 = new ChessBoard();
+        board1.launchPerftChecks();
+        System.out.println();
+
+        System.out.println("Quick implementation perft");
+        QuickChessBoard board = new QuickChessBoard();
+        board.launchPerftChecks();
+        System.out.println();
+
+        System.out.println("Quick integer implementation perft");
+        IntegerChessBoard b = new IntegerChessBoard();
+        b.launchPerftChecks();*/
+
     }
 }
