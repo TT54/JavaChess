@@ -1,6 +1,7 @@
 package fr.tt54.chess.graphics;
 
 import fr.tt54.chess.ChessMain;
+import fr.tt54.chess.FrameManager;
 import fr.tt54.chess.game.AbstractChessBoard;
 import fr.tt54.chess.game.ChessMove;
 import fr.tt54.chess.game.ChessPiece;
@@ -78,6 +79,12 @@ public class ChessPanel2 extends GraphicPanel {
                             moveIndicators.remove(n);
                         }
 
+                        FrameManager manager = ChessMain.manager;
+                        if(manager.isBotEnabled() && manager.isBotTurn()) {
+                            selected[0] = null;
+                            return;
+                        }
+
                         if(selected[0] != node && node.getPiece().isWhite() == board.isWhiteToPlay()) {
                             moveIndicators.add(new RectangleNode(ChessPanel2.this,(column - 4) * squareSize + (squareSize - pieceSize), (7 - row - 4) * squareSize + (squareSize - pieceSize),
                                     squareSize, squareSize, new Color(200, 200, 0, 50)));
@@ -111,7 +118,7 @@ public class ChessPanel2 extends GraphicPanel {
                 squareSize, squareSize, new Color(200, 0, 0, 50));
         indicatorNode.setClickAction(nodeClickedEvent1 -> {
             board.playMove(move);
-            this.refreshBoard();
+            ChessMain.manager.movePlayedOnBoard();
         });
         return indicatorNode;
     }

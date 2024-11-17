@@ -1,5 +1,6 @@
 package fr.tt54.chess;
 
+import fr.tt54.chess.bots.MinMaxBot;
 import fr.tt54.chess.game.AbstractChessBoard;
 import fr.tt54.chess.game.ChessBoard;
 import fr.tt54.chess.game.IntegerChessBoard;
@@ -16,11 +17,17 @@ public class ChessMain {
 
     public static void main(String[] args) {
         manager = new FrameManager();
+        manager.setBot(new MinMaxBot(false, 4));
+
         IntegerChessBoard active = new IntegerChessBoard();
+        System.out.println(active.isWhiteToPlay());
         manager.showFrame(active);
 
 
-        /*System.out.println("Standard implementation perft");
+    }
+
+    public static void compareChessBoards(){
+        System.out.println("Standard implementation perft");
         ChessBoard board1 = new ChessBoard();
         board1.launchPerftChecks();
         System.out.println();
@@ -32,7 +39,6 @@ public class ChessMain {
 
         System.out.println("Quick integer implementation perft");
         IntegerChessBoard b = new IntegerChessBoard();
-        b.launchPerftChecks();*/
-
+        b.launchPerftChecks();
     }
 }

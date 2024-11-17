@@ -50,7 +50,7 @@ public class IntegerChessBoard {
             List<Integer> validMoves = new ArrayList<>();
 
             for (ChessPiece piece : ChessPiece.getColoredPieces(whiteToPlay)) {
-                for (int position : new HashSet<>(getPiecePositions(piece))) {
+                for (int position : getPiecePositions(piece)) {
                     switch (piece){
                         case BLACK_BISHOP, BLACK_ROOK, BLACK_QUEEN, WHITE_BISHOP, WHITE_ROOK, WHITE_QUEEN -> addStandardMoves(allowedMoves, piece, position, false);
                         case BLACK_KNIGHT, WHITE_KNIGHT -> addKnightMoves(allowedMoves, piece, position, false);
@@ -78,7 +78,7 @@ public class IntegerChessBoard {
             List<Integer> validMoves = new ArrayList<>();
 
             for (ChessPiece piece : ChessPiece.getColoredPieces(whiteToPlay)) {
-                for (int position : new HashSet<>(getPiecePositions(piece))) {
+                for (int position : getPiecePositions(piece)) {
                     switch (piece){
                         case BLACK_BISHOP, BLACK_ROOK, BLACK_QUEEN, WHITE_BISHOP, WHITE_ROOK, WHITE_QUEEN -> addStandardMoves(allowedMoves, piece, position, false);
                         case BLACK_KNIGHT, WHITE_KNIGHT -> addKnightMoves(allowedMoves, piece, position, false);
@@ -126,9 +126,18 @@ public class IntegerChessBoard {
         return squaresAttackers[white ? whiteKingPosition : blackKingPosition];
     }
 
+    /**
+     * Warning : this function should be called after getAllowedMoves() !
+     * @return If the current player is in check
+     */
+    public boolean isKingInCheck(){
+        PartialIntegerList attackers = getKingAttackers(whiteToPlay);
+        return attackers != null && attackers.size() > 0;
+    }
+
     private void fillPseudoLegalMoves(List<Integer> moves, boolean white, boolean shouldFillAttackedSquares){
         for (ChessPiece piece : ChessPiece.getColoredPieces(white)) {
-            for (int position : new HashSet<>(getPiecePositions(piece))) {
+            for (int position : getPiecePositions(piece)) {
                 switch (piece){
                     case BLACK_BISHOP, BLACK_ROOK, BLACK_QUEEN, WHITE_BISHOP, WHITE_ROOK, WHITE_QUEEN -> addStandardMoves(moves, piece, position, shouldFillAttackedSquares);
                     case BLACK_KNIGHT, WHITE_KNIGHT -> addKnightMoves(moves, piece, position, shouldFillAttackedSquares);
@@ -576,17 +585,6 @@ public class IntegerChessBoard {
 
         boolean promote = (extraDatas & 0b1000) != 0;
 
-/*
-        System.out.println(Integer.toBinaryString(move));
-        System.out.println(Integer.toBinaryString(castles));
-        System.out.println(enPassant);
-        System.out.println(Integer.toBinaryString(initialPosition));
-        System.out.println(Integer.toBinaryString(finalPosition));
-        System.out.println(movedPiece);
-        System.out.println(capturedPiece);
-        System.out.println(Integer.toBinaryString(extraDatas));
-        System.out.println("-----------------");*/
-
         if(promote){
             int unsignedPromotedPieceId = extraDatas & 0b111;
             ChessPiece promotedPiece = ChessPiece.getPiece(playerSign * unsignedPromotedPieceId);
@@ -641,6 +639,10 @@ public class IntegerChessBoard {
 
     public Set<Integer> getPiecePositions(ChessPiece piece){
         return piecesPositions.getOrDefault(piece, new HashSet<>());
+    }
+
+    public Map<ChessPiece, Set<Integer>> getPiecesPositions(){
+        return piecesPositions;
     }
 
     private void addPiecePosition(ChessPiece piece, int position){
@@ -733,7 +735,8 @@ public class IntegerChessBoard {
             if(args[3].equalsIgnoreCase("-")){
                 this.enPassant = 0;
             } else {
-                this.enPassant = getPosition(args[3]);
+                int value = getPosition(args[3]);
+                this.enPassant = whiteToPlay ? value - 8 : value + 8;
             }
         }
 
