@@ -7,15 +7,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class MinMaxBot extends AbstractChessBot{
-
-    private static final int mateValue = 100000;
+public class AlphaBetaBot extends AbstractChessBot{
 
     private IntegerChessBoard board;
     private final int depth;
+
     private int evaluatedPositions = 0;
 
-    public MinMaxBot(boolean white, int depth) {
+    public AlphaBetaBot(boolean white, int depth) {
         super(white);
         this.depth = depth;
     }
@@ -32,7 +31,7 @@ public class MinMaxBot extends AbstractChessBot{
             int max = Integer.MIN_VALUE;
             for (int move : board.getAllowedMoves()) {
                 board.playMove(move);
-                int eval = getMinMaxEval(depth-1, depth);
+                int eval = getAlphaBetaEval(depth-1, depth, Integer.MIN_VALUE, Integer.MAX_VALUE);
                 board.undoMove(move);
 
                 if(eval >= max){
@@ -44,18 +43,14 @@ public class MinMaxBot extends AbstractChessBot{
             int min = Integer.MAX_VALUE;
             for (int move : board.getAllowedMoves()) {
                 board.playMove(move);
-                int eval = getMinMaxEval(depth-1, depth);
+                int eval = getAlphaBetaEval(depth-1, depth, Integer.MIN_VALUE, Integer.MAX_VALUE);
                 board.undoMove(move);
 
                 if(eval <= min){
                     min = eval;
                     bestMove = move;
                 }
-
-                System.out.println(eval);
             }
-
-            System.out.println("best is " + min);
         }
 
         if(bestMove != -1){
@@ -65,7 +60,7 @@ public class MinMaxBot extends AbstractChessBot{
         System.out.println("Evaluated : " + evaluatedPositions + " positions in " + (System.currentTimeMillis() - time) + "ms");
     }
 
-    public int getMinMaxEval(int depth, int maxDepth){
+    public int getAlphaBetaEval(int depth, int maxDepth, int alpha, int beta){
         if(depth == 0){
             this.evaluatedPositions++;
             return evaluatePosition();
@@ -84,12 +79,13 @@ public class MinMaxBot extends AbstractChessBot{
                 int max = Integer.MIN_VALUE;
                 for(int move : moves){
                     this.board.playMove(move);
-                    int eval = getMinMaxEval(depth - 1, maxDepth);
+                    max = Math.max(max, getAlphaBetaEval(depth - 1, maxDepth, alpha, beta));
                     this.board.undoMove(move);
 
-                    if(max < eval){
-                        max = eval;
+                    if(max >= beta){
+                        return max;
                     }
+                    alpha = Math.max(alpha, max);
                 }
 
                 return max;
@@ -99,12 +95,13 @@ public class MinMaxBot extends AbstractChessBot{
                 int min = Integer.MAX_VALUE;
                 for(int move : moves){
                     this.board.playMove(move);
-                    int eval = getMinMaxEval(depth - 1, maxDepth);
+                    min = Math.min(min, getAlphaBetaEval(depth - 1, maxDepth, alpha, beta));
                     this.board.undoMove(move);
 
-                    if(min > eval){
-                        min = eval;
+                    if(alpha >= min){
+                        return min;
                     }
+                    beta = Math.min(beta, min);
                 }
 
                 return min;

@@ -1,5 +1,6 @@
 package fr.tt54.chess;
 
+import fr.tt54.chess.bots.AlphaBetaBot;
 import fr.tt54.chess.bots.MinMaxBot;
 import fr.tt54.chess.game.AbstractChessBoard;
 import fr.tt54.chess.game.ChessBoard;
@@ -17,7 +18,7 @@ public class ChessMain {
 
     public static void main(String[] args) {
         manager = new FrameManager();
-        manager.setBot(new MinMaxBot(false, 4));
+        manager.setBot(new AlphaBetaBot(false, 4));
 
         IntegerChessBoard active = new IntegerChessBoard();
         System.out.println(active.isWhiteToPlay());
